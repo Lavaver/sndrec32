@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "rLy5KHsVtI0mGinVMZDsWKJLyk/yZyjb3QRljWb8+gJbD/in03TQW25fElQXG79Bht+zx4TVLfVhiFWsg9mZGw==",
+  "dgSpecHash": "8u2FjtrrAnHl9m6GXArO5iUTqphwECLKtCDeZTuzPCOj1UoSphon7PiDkTHkZtCf3l+osNb605VkBR5o1I9WPA==",
   "success": true,
   "projectFilePath": "D:\\repos\\sndrec32 For .NET\\sndrec32 For .NET.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\vvv\\.nuget\\packages\\libvlcsharp\\3.8.2\\libvlcsharp.3.8.2.nupkg.sha512",
     "C:\\Users\\vvv\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
     "C:\\Users\\vvv\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
     "C:\\Users\\vvv\\.nuget\\packages\\naudio\\2.2.1\\naudio.2.2.1.nupkg.sha512",
@@ -14,7 +15,8 @@
     "C:\\Users\\vvv\\.nuget\\packages\\naudio.wasapi\\2.2.1\\naudio.wasapi.2.2.1.nupkg.sha512",
     "C:\\Users\\vvv\\.nuget\\packages\\naudio.winmm\\2.2.1\\naudio.winmm.2.2.1.nupkg.sha512",
     "C:\\Users\\vvv\\.nuget\\packages\\system.security.accesscontrol\\4.7.0\\system.security.accesscontrol.4.7.0.nupkg.sha512",
-    "C:\\Users\\vvv\\.nuget\\packages\\system.security.principal.windows\\4.7.0\\system.security.principal.windows.4.7.0.nupkg.sha512"
+    "C:\\Users\\vvv\\.nuget\\packages\\system.security.principal.windows\\4.7.0\\system.security.principal.windows.4.7.0.nupkg.sha512",
+    "C:\\Users\\vvv\\.nuget\\packages\\videolan.libvlc.windows\\3.0.20\\videolan.libvlc.windows.3.0.20.nupkg.sha512"
   ],
   "logs": []
 }

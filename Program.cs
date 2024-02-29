@@ -1,23 +1,27 @@
 ﻿using NAudio.Wave;
 using System;
+using LibVLCSharp.Shared;
 
-namespace MusicPlayer
+namespace sndrec32
 {
     class Program
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("初始化中，请稍候...");
+            Core.Initialize();
+
             if (args.Length < 1)
             {
-                Console.WriteLine("Usage: snderc32 <-play/-rec> [music_file_path/save_location]");
+                Console.WriteLine("用法：snderc32 <-play/-rec/-radio/-log> [音频地址/录音保存路径/在线电台频道(CNR1,CNR2,CNR3,CGTN)或指定广播地址]");
                 return;
             }
 
             string command = args[0];
 
-            if (command != "-play" && command != "-rec")
+            if (command != "-play" && command != "-rec" && command !="-radio" && command !="-log")
             {
-                Console.WriteLine("Invalid command. Please use -play for playing or -rec for recording.");
+                Console.WriteLine("未知命令。请使用 -play 参数播放音频，-rec 录音，-radio 聆听在线广播或 -log 查阅更新日志。");
                 return;
             }
 
@@ -35,13 +39,23 @@ namespace MusicPlayer
             {
                 RecordAudio(filePath);
             }
+            else if (args.Length > 1 && args[0] == "-radio")
+            {
+                string channel = args[1]; // 获取频道信息
+                PlayChinaSound(channel);
+            }
+            else if (command == "-log")
+            {
+                Showupdatelog(args);
+            }
+
         }
 
         static void PlayMusic(string filePath)
         {
             if (string.IsNullOrEmpty(filePath))
             {
-                Console.WriteLine("Please provide a valid music file path to play.");
+                Console.WriteLine("请输入文件地址以播放音频。");
                 return;
             }
 
@@ -55,7 +69,7 @@ namespace MusicPlayer
                     outputDevice.Init(audioFile);
                     outputDevice.Play();
 
-                    Console.WriteLine("Playing music. Press any key to stop.");
+                    Console.WriteLine("正在播放。按任意键停止并退出程序。");
                     Console.ReadKey();
 
                     outputDevice.Stop();
@@ -63,7 +77,7 @@ namespace MusicPlayer
             }
             else
             {
-                Console.WriteLine("Unsupported file format. Only .wav, .mp3, .ogg, and .flac are supported.");
+                Console.WriteLine("目前仅支持 .wav, .mp3, .ogg, 与 .flac 格式的音频文件");
             }
         }
 
@@ -79,7 +93,7 @@ namespace MusicPlayer
                 if (extension != ".wav")
                 {
                     saveLocation = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(saveLocation), "rec44.wav");
-                    Console.WriteLine("Invalid file extension. Defaulting to rec44.wav as save location.");
+                    Console.WriteLine("未定义录音名称或后缀无效。已将文件名重定向为 rec44.wav 。");
                 }
             }
 
@@ -96,14 +110,67 @@ namespace MusicPlayer
 
                 waveIn.StartRecording();
 
-                Console.WriteLine("Recording. Press any key to stop and save.");
+                Console.WriteLine("正在录音。按任意键停止录音并保存关闭软件。");
                 Console.ReadKey();
 
                 waveIn.StopRecording();
                 writer.Dispose();
             }
 
-            Console.WriteLine("Recording saved to: " + saveLocation);
+            Console.WriteLine("您的录音已存储至：" + saveLocation);
+        }
+
+        static void PlayChinaSound(string channel)
+        {
+            string url = GetChinaSoundUrlForChannel(channel); // 根据频道获取相应的 mms 协议网络广播地址
+
+            using (var libVLC = new LibVLC())
+            {
+                using (var media = new Media(libVLC, new Uri(url)))
+                {
+                    using (var mediaPlayer = new MediaPlayer(media))
+                    {
+                        mediaPlayer.Play();
+
+                        Console.WriteLine($"目前正在播放来自 {channel} 频道的广播。按任意键停止广播并关闭软件。");
+                        Console.ReadKey();
+
+                        mediaPlayer.Stop();
+                    }
+                }
+            }
+        }
+
+        static string GetChinaSoundUrlForChannel(string channel)
+        {
+            switch (channel)
+            {
+                case "CNR1":
+                    return "https://live-play.cctvnews.cctv.com/cctv/zgzs192.m3u8";
+                case "CNR2":
+                    return "http://ngcdn006.cnr.cn/live/szzs/index.m3u8";
+                case "CNR3":
+                    return "http://ngcdn016.cnr.cn/live/gsgljtgb/index.m3u8";
+                case "CGTN":
+                    return "http://sk.cri.cn/am846.m3u8";
+                default:
+                    return channel; // 如果频道信息不匹配，则返回空串
+            }
+        }
+
+        static void Showupdatelog(string[] args)
+        {
+            Console.WriteLine("sndrec32 - 一款微软组件复兴项目 发行版 v2.0");
+            Console.WriteLine("------------------------------------------");
+            Console.WriteLine("基于 NAudio 及 libVLC 库技术架构");
+            Console.WriteLine("请支持自由软件事业的开发，谢谢！");
+            Console.WriteLine("若你是通过购买方式获得的该软件或所谓“破解版”，你应该向商家退款并维权。");
+            Console.WriteLine("仓库地址：https://github.com/lavaver/sndrec32");
+            Console.WriteLine("------------------------------------------");
+            Console.WriteLine("更新内容：");
+            Console.WriteLine("- 添加了 libVLC 库以及网络电台的支持。");
+            Console.WriteLine("- 添加了 -radio [CNR1,2,3 或 CGTN] 参数，使其可以收听广播。");
+            Console.WriteLine("- 目前正在努力寻找新的电台 CNR1（中国之声）频道的 m3u8 源，有所不便敬请谅解！");
         }
     }
 }
