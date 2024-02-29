@@ -1,0 +1,25 @@
+D:\repos\sndrec32 For .NET\bin\Debug\net8.0\sndrec32 For .NET.exe
+D:\repos\sndrec32 For .NET\bin\Debug\net8.0\sndrec32 For .NET.deps.json
+D:\repos\sndrec32 For .NET\bin\Debug\net8.0\sndrec32 For .NET.runtimeconfig.json
+D:\repos\sndrec32 For .NET\bin\Debug\net8.0\sndrec32 For .NET.dll
+D:\repos\sndrec32 For .NET\bin\Debug\net8.0\sndrec32 For .NET.pdb
+D:\repos\sndrec32 For .NET\obj\Debug\net8.0\sndrec32 For .NET.GeneratedMSBuildEditorConfig.editorconfig
+D:\repos\sndrec32 For .NET\obj\Debug\net8.0\sndrec32 For .NET.AssemblyInfoInputs.cache
+D:\repos\sndrec32 For .NET\obj\Debug\net8.0\sndrec32 For .NET.AssemblyInfo.cs
+D:\repos\sndrec32 For .NET\obj\Debug\net8.0\sndrec32 For .NET.csproj.CoreCompileInputs.cache
+D:\repos\sndrec32 For .NET\obj\Debug\net8.0\sndrec32 For .NET.dll
+D:\repos\sndrec32 For .NET\obj\Debug\net8.0\refint\sndrec32 For .NET.dll
+D:\repos\sndrec32 For .NET\obj\Debug\net8.0\sndrec32 For .NET.pdb
+D:\repos\sndrec32 For .NET\obj\Debug\net8.0\sndrec32 For .NET.genruntimeconfig.cache
+D:\repos\sndrec32 For .NET\obj\Debug\net8.0\ref\sndrec32 For .NET.dll
+D:\repos\sndrec32 For .NET\bin\Debug\net8.0\NAudio.dll
+D:\repos\sndrec32 For .NET\bin\Debug\net8.0\NAudio.Asio.dll
+D:\repos\sndrec32 For .NET\bin\Debug\net8.0\NAudio.Core.dll
+D:\repos\sndrec32 For .NET\bin\Debug\net8.0\NAudio.Midi.dll
+D:\repos\sndrec32 For .NET\bin\Debug\net8.0\NAudio.Wasapi.dll
+D:\repos\sndrec32 For .NET\bin\Debug\net8.0\NAudio.WinMM.dll
+D:\repos\sndrec32 For .NET\obj\Debug\net8.0\sndrec32 For .NET.csproj.AssemblyReference.cache
+D:\repos\sndrec32 For .NET\obj\Debug\net8.0\sndrec32.B9CC5BB8.Up2Date
+D:\repos\sndrec32 For .NET\bin\Debug\net8.0\libmp3lame.32.dll
+D:\repos\sndrec32 For .NET\bin\Debug\net8.0\libmp3lame.64.dll
+D:\repos\sndrec32 For .NET\bin\Debug\net8.0\NAudio.Lame.dll
