@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("sndrec32 For .NET")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+749e2f19cf17e3e9da5f8afd7b4d3e36717253f7")]
 [assembly: System.Reflection.AssemblyProductAttribute("sndrec32 For .NET")]
 [assembly: System.Reflection.AssemblyTitleAttribute("sndrec32 For .NET")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

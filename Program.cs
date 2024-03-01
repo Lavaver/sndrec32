@@ -1,6 +1,7 @@
 ﻿using NAudio.Wave;
 using System;
 using LibVLCSharp.Shared;
+using System.Diagnostics;
 
 namespace sndrec32
 {
@@ -8,8 +9,37 @@ namespace sndrec32
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("初始化中，请稍候...");
+            Console.WriteLine("检查 .NET 桌面运行时版本。");
+            // 检查.NET运行时版本是否符合要求
+            Version requiredVersion = new Version(8, 0);
+
+            if (Environment.Version < requiredVersion)
+            {
+                Console.WriteLine("错误：当前 .NET 运行时版本低于所需版本，或未安装相应运行时，请升级或安装 .NET 8.0 及以上版本。");
+                Console.WriteLine("至 https://dotnet.microsoft.com/zh-cn/download/dotnet/8.0 安装 .NET 8.0 桌面运行时");
+                Console.WriteLine("针对于开发者，你应该确保安装了 SDK 8.0 及以上版本。");
+                return;
+            }
+            else
+            {
+                Console.WriteLine("运行时版本满足该软件运行需要，继续。");
+                Console.WriteLine("---------------------------------");
+            }
+
+            Console.WriteLine("初始化内核，请稍候...");
             Core.Initialize();
+            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionTrapper;
+            Console.WriteLine("内核初始化完成。");
+
+            // 检测是否处于调试模式
+            if (Debugger.IsAttached)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow; // 将字体颜色设置为黄色
+                Console.WriteLine("警告：您当前处于调试模式。");
+                ShowDebugMenu(); // 显示调试菜单
+                Console.ResetColor(); // 重置控制台颜色
+                return; // 在展示调试菜单后退出程序或继续根据用户输入进行调试操作
+            }
 
             if (args.Length < 1)
             {
@@ -99,7 +129,7 @@ namespace sndrec32
 
             using (var waveIn = new WaveInEvent())
             {
-                waveIn.WaveFormat = new WaveFormat(44100, 1); // 设置音频格式为44.1kHz采样率，单声道
+                waveIn.WaveFormat = new WaveFormat(44100, 1); // 设置音频格式为44.1kHz采样率
 
                 var writer = new WaveFileWriter(saveLocation, waveIn.WaveFormat);
 
@@ -122,23 +152,24 @@ namespace sndrec32
 
         static void PlayChinaSound(string channel)
         {
-            string url = GetChinaSoundUrlForChannel(channel); // 根据频道获取相应的 mms 协议网络广播地址
+                string url = GetChinaSoundUrlForChannel(channel); // 根据频道获取相应的 mms 协议网络广播地址
 
-            using (var libVLC = new LibVLC())
-            {
-                using (var media = new Media(libVLC, new Uri(url)))
+                using (var libVLC = new LibVLC())
                 {
-                    using (var mediaPlayer = new MediaPlayer(media))
+                    using (var media = new Media(libVLC, new Uri(url)))
                     {
-                        mediaPlayer.Play();
+                        using (var mediaPlayer = new MediaPlayer(media))
+                        {
+                            mediaPlayer.Play();
 
-                        Console.WriteLine($"目前正在播放来自 {channel} 频道的广播。按任意键停止广播并关闭软件。");
-                        Console.ReadKey();
+                            Console.WriteLine($"目前正在播放来自 {channel} 频道的广播。按任意键停止广播并关闭软件。");
+                            Console.ReadKey();
 
-                        mediaPlayer.Stop();
+                            mediaPlayer.Stop();
+                        }
                     }
                 }
-            }
+            
         }
 
         static string GetChinaSoundUrlForChannel(string channel)
@@ -154,13 +185,13 @@ namespace sndrec32
                 case "CGTN":
                     return "http://sk.cri.cn/am846.m3u8";
                 default:
-                    return channel; // 如果频道信息不匹配，则返回空串
+                    return channel; // 如果频道信息不匹配，则使用指定地址播放
             }
         }
 
         static void Showupdatelog(string[] args)
         {
-            Console.WriteLine("sndrec32 - 一款微软组件复兴项目 发行版 v2.0");
+            Console.WriteLine("sndrec32 - 一款微软组件复兴项目 发行版 v2.2");
             Console.WriteLine("------------------------------------------");
             Console.WriteLine("基于 NAudio 及 libVLC 库技术架构");
             Console.WriteLine("请支持自由软件事业的开发，谢谢！");
@@ -168,9 +199,62 @@ namespace sndrec32
             Console.WriteLine("仓库地址：https://github.com/lavaver/sndrec32");
             Console.WriteLine("------------------------------------------");
             Console.WriteLine("更新内容：");
-            Console.WriteLine("- 添加了 libVLC 库以及网络电台的支持。");
-            Console.WriteLine("- 添加了 -radio [CNR1,2,3 或 CGTN] 参数，使其可以收听广播。");
-            Console.WriteLine("- 目前正在努力寻找新的电台 CNR1（中国之声）频道的 m3u8 源，有所不便敬请谅解！");
+            Console.WriteLine("- 常规更新。修复了包括抛出异常无法得到有效反馈在内的 Bug。");
+            Console.WriteLine("- 为开发人员新增调试模式菜单。");
+            Console.WriteLine("- 有关该版本的详细信息，请参阅 https://github.com/lavaver/sndrec32/releases");
+        }
+
+        static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)
+        {
+            Console.WriteLine("OOps！程序居然以及其不优雅的姿态蓝屏了！");
+            Console.WriteLine("这对于开发者运动会上是极为重大的失误！这个程序可能因此被裁判红牌罚下！");
+            Console.WriteLine("我们将输出有关引起该错误的日志，稍后你可以重新启动程序或提交 Issues。");
+            Console.WriteLine((e.ExceptionObject as Exception).Message);
+            Environment.Exit(1);
+        }
+
+        static void ShowDebugMenu()
+        {
+            Console.WriteLine("调试菜单");
+            Console.WriteLine("-------------------");
+            Console.WriteLine("[1] 音乐播放");
+            Console.WriteLine("[2] 广播");
+            Console.WriteLine("[3] 手动触发异常");
+            Console.WriteLine("[4] 退出程序");
+
+            bool keepRunning = true; // 控制循环的布尔变量
+
+            while (keepRunning)
+            {
+
+                Console.WriteLine("请输入选项：");
+                string option = Console.ReadLine();
+
+                switch (option)
+                {
+                    case "1":
+                        // 调用音乐播放函数，此处需要实现逻辑以获取音乐文件路径
+                        Console.WriteLine("请输入音乐文件路径：");
+                        string musicPath = Console.ReadLine();
+                        PlayMusic(musicPath);
+                        break;
+                    case "2":
+                        // 直接播放 CGTN
+                        Console.WriteLine("播放预设广播频道...");
+                        PlayChinaSound("CGTN");
+                        break;
+                    case "3":
+                        Console.WriteLine("手动触发异常...");
+                        throw new Exception("异常已被手动抛出。");
+                    case "4":
+                        Console.WriteLine("退出调试...");
+                        keepRunning = false; // 更新控制变量以退出循环
+                        break;
+                    default:
+                        Console.WriteLine("无效的选项。");
+                        break;
+                }
+            }
         }
     }
 }
